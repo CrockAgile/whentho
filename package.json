@@ -10,7 +10,7 @@
     "deploy": "wrangler publish",
     "deploy:staging": "wrangler publish --env staging",
     "deploy:production": "wrangler publish --env production",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "ts-mocha src/**/*.spec.ts test/**/*.spec.ts"
   },
   "repository": {
     "type": "git",
@@ -32,9 +32,14 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^1.0.9",
+    "@types/chai": "^4.2.11",
+    "@types/mocha": "^7.0.2",
+    "chai": "^4.2.0",
     "husky": "^4.2.5",
     "lint-staged": "^10.1.6",
+    "mocha": "^7.1.1",
     "prettier": "^2.0.4",
+    "ts-mocha": "^7.0.0",
     "tslint": "^6.1.1",
     "tslint-config-prettier": "^1.18.0",
     "tslint-plugin-prettier": "^2.3.0",
