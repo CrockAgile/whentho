@@ -1,0 +1,43 @@
+{
+  "name": "whentho",
+  "version": "0.1.0",
+  "description": "When Tho?",
+  "main": "dist/index.js",
+  "scripts": {
+    "format": "tslint --fix -p tsconfig.json",
+    "build": "tsc",
+    "deploy": "wrangler publish",
+    "deploy:staging": "wrangler publish --env staging",
+    "deploy:production": "wrangler publish --env production",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CrockAgile/whentho.git"
+  },
+  "author": "Jeff Crocker <crockagile@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/CrockAgile/whentho/issues"
+  },
+  "homepage": "https://github.com/CrockAgile/whentho#readme",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.ts": "tslint --fix"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^1.0.9",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.1.6",
+    "prettier": "^2.0.4",
+    "tslint": "^6.1.1",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-plugin-prettier": "^2.3.0",
+    "typescript": "^3.8.3",
+    "wrangler": "0.0.2"
+  }
+}
