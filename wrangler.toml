@@ -1,5 +1,6 @@
 name = 'whentho-api-development'
 type = 'webpack'
+webpack_config = 'webpack.config.js'
 account_id = 'f662588e1b414d6188fce196fd7e6d66'
 zone_id = '504b4d349429345f123b3736d588c034'
 route = 'https://api-development.whentho.xyz/*'
