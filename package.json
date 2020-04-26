@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^1.0.9",
+    "@cloudflare/wrangler": "^1.8.4",
     "@types/jest": "^25.2.1",
     "@types/node": "^13.13.2",
     "husky": "^4.2.5",
@@ -48,8 +49,7 @@
     "types-cloudflare-worker": "^1.1.2",
     "typescript": "^3.8.3",
     "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.11",
-    "wrangler": "0.0.2"
+    "webpack-cli": "^3.3.11"
   },
   "dependencies": {
     "apollo-server-cloudflare": "^2.12.0",
