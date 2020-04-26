@@ -1,7 +1,9 @@
 import { getResponse } from './getResponse';
+import { enableCors } from './cors';
 
 addEventListener('fetch', event => {
   const { request } = event;
   const response = getResponse(request);
-  event.respondWith(response);
+  const responseCors = enableCors(response);
+  event.respondWith(responseCors);
 });
