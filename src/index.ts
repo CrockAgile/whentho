@@ -1,6 +1,7 @@
-import { handler } from './handler';
+import { getResponse } from './getResponse';
 
 addEventListener('fetch', event => {
-  const response = handler(event.request);
+  const { request } = event;
+  const response = getResponse(request);
   event.respondWith(response);
 });
