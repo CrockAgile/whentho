@@ -1,0 +1,3 @@
+describe('worker', () => {
+  it('passes', () => {});
+});
