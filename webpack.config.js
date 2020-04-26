@@ -1,22 +1,27 @@
 const path = require('path');
 
 module.exports = {
-    entry: {
-        'index': './src/index.ts',
+  target: 'webworker',
+  mode: 'production',
+  entry: './src/index.ts',
+  output: {
+    filename: 'index.js',
+    path: path.resolve(__dirname, 'dist'),
+  },
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
+    ],
+  },
+  resolve: {
+    modules: ['node_modules', path.resolve(__dirname, 'src')],
+    extensions: ['.js', '.ts'],
+    alias: {
+      fs: path.resolve(__dirname, './null.js'),
     },
-    /*devtool: 'inline-source-map',*/
-    module: {
-        rules: [{
-            test: /\.tsx?$/,
-            use: 'ts-loader',
-            exclude: /node_modules/
-        }]
-    },
-    resolve: {
-        extensions: ['.ts']
-    },
-    output: {
-        filename: 'index.js',
-        path: path.resolve(__dirname, 'dist')
-    }
+  },
 };
