@@ -1,8 +1,6 @@
-export type StorageKind = 'meeting' | 'vote';
-
 export interface StorageKey {
   scope: string;
-  kind: StorageKind;
+  kind: 'meeting' | 'vote';
 }
 
 export interface StorageItem extends StorageKey {
