@@ -1,11 +1,22 @@
-import { makeExecutableSchema } from 'apollo-server-cloudflare';
-import * as community from './community';
+import { GraphQLSchema } from 'graphql';
+import { gql, makeExecutableSchema } from 'apollo-server-cloudflare';
+import { Model } from '../model';
+import { query } from './query';
+import { mutation } from './mutation';
 
-const typeDefs = [community.schema];
+export function schema(models: Model[]): GraphQLSchema {
+  const topQuery = query(models);
+  const topMutation = mutation(models);
+  const resolvers = models.map(m => m.resolvers);
+  const types = models.map(m => m.type).join('\n');
 
-const resolvers = [community.resolvers];
+  const all = `
+  ${types}
+  ${topQuery}
+  ${topMutation}
+  `;
 
-export const schema = makeExecutableSchema({
-  typeDefs,
-  resolvers,
-});
+  const typeDefs = gql(all);
+
+  return makeExecutableSchema({ typeDefs, resolvers });
+}

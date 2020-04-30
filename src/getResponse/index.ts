@@ -1,8 +1,9 @@
 import { handler } from '../handler';
 import { schema } from '../schema';
 import { GraphQLHandler } from '../graphql';
+import { Models } from '../models';
 
-const graphqlHandler = new GraphQLHandler(schema);
+const graphqlHandler = new GraphQLHandler(schema(Models));
 
 export async function getResponse(request: Request): Promise<Response> {
   const url = new URL(request.url);
