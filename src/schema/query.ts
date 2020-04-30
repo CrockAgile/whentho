@@ -1,7 +1,7 @@
-import { Model } from '../model';
+import { SchemaType } from './type';
 
-export function query(models: Model[]): string {
-  const queries = models.map(m => m.query);
+export function query(schemaTypes: SchemaType[]): string {
+  const queries = schemaTypes.map(m => m.query);
   return `type Query {
     ${queries.join('\n')}
   }`.trim();

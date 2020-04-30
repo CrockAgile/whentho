@@ -1,7 +1,7 @@
 import { query } from './query';
 
 it('builds top level query', () => {
-  const models = [
+  const schemaTypes = [
     {
       query: 'somethingById(id: ID!) : Something',
       mutation: '',
@@ -10,7 +10,7 @@ it('builds top level query', () => {
     },
   ];
 
-  const topQuery = query(models);
+  const topQuery = query(schemaTypes);
 
   expect(topQuery).toMatchInlineSnapshot(`
     "type Query {
