@@ -1,14 +1,16 @@
 import { GraphQLSchema } from 'graphql';
 import { gql, makeExecutableSchema } from 'apollo-server-cloudflare';
-import { Model } from '../model';
+import { SchemaType } from './type';
 import { query } from './query';
 import { mutation } from './mutation';
 
-export function schema(models: Model[]): GraphQLSchema {
-  const topQuery = query(models);
-  const topMutation = mutation(models);
-  const resolvers = models.map(m => m.resolvers);
-  const types = models.map(m => m.type).join('\n');
+export { SCHEMA_TYPES } from './types';
+
+export function schema(schemaTypes: SchemaType[]): GraphQLSchema {
+  const topQuery = query(schemaTypes);
+  const topMutation = mutation(schemaTypes);
+  const resolvers = schemaTypes.map(m => m.resolvers);
+  const types = schemaTypes.map(m => m.type).join('\n');
 
   const all = `
   ${types}

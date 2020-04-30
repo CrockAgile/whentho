@@ -1,7 +1,7 @@
-import { Model } from '../model';
+import { SchemaType } from './type';
 
-export function mutation(models: Model[]): string {
-  const mutations = models.map(m => m.mutation);
+export function mutation(schemaTypes: SchemaType[]): string {
+  const mutations = schemaTypes.map(m => m.mutation);
   return `type Mutation {
     ${mutations.join('\n')}
   }`.trim();

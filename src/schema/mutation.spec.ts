@@ -1,7 +1,7 @@
 import { mutation } from './mutation';
 
 it('builds top level mutation', () => {
-  const models = [
+  const schemaTypes = [
     {
       query: '',
       mutation: 'something(name: String!) : Something!',
@@ -10,7 +10,7 @@ it('builds top level mutation', () => {
     },
   ];
 
-  const topQuery = mutation(models);
+  const topQuery = mutation(schemaTypes);
 
   expect(topQuery).toMatchInlineSnapshot(`
     "type Mutation {

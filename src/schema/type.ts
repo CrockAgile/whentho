@@ -1,6 +1,6 @@
 import { IResolvers } from 'apollo-server-cloudflare';
 
-export interface Model {
+export interface SchemaType {
   query: string;
   mutation: string;
   type: string;

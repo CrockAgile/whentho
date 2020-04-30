@@ -19,6 +19,6 @@ describe('getResponse', () => {
     const {
       data: { community },
     } = await response.json();
-    expect(community).toEqual({ id, name: `${id} needs a name` });
+    expect(community).toEqual({ id, name: `${id} is a community` });
   });
 });

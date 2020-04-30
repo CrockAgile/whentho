@@ -1,32 +1,34 @@
 import { IResolvers } from 'apollo-server-cloudflare';
-import { Model } from '../model';
+import { SchemaType } from '../type';
 
 const type = `
-  type Community {
+  type Meeting {
     id: ID!
-    name: String!
+    name: String
   }
 `;
 
 const query = `
-  community(id: ID!) : Community
+  meeting(id: ID!) : Meeting
 `;
 
-const mutation = '';
+const mutation = `
+  meeting(name: String): Meeting!
+`;
 
 const resolvers: IResolvers<any, any> = {
   Query: {
-    community: async (_parents, args, _context, _info) => {
+    meeting: async (_parents, args, _context, _info) => {
       const { id } = args;
       return {
         id,
-        name: `${id} needs a name`,
+        name: `${id} is a meeting`,
       };
     },
   },
 };
 
-export const Community: Model = {
+export const Meeting: SchemaType = {
   type,
   query,
   mutation,
