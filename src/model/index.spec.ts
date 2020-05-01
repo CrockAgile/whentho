@@ -79,5 +79,11 @@ describe('model API', () => {
       const retrieved = await api.getMeetingVotes([id]);
       expect(retrieved).toEqual([{ ...meeting, votes: bountyVotes }]);
     });
+
+    it('ignores votes without meeting', async () => {
+      await api.vote(votes);
+      const retrieved = await api.getMeetingVotes([id]);
+      expect(retrieved).toEqual([]);
+    });
   });
 });
