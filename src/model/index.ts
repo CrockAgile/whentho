@@ -14,6 +14,7 @@ export interface MeetingWithVotes extends Meeting {
 }
 
 export type Vote = {
+  id: string;
   kind: 'vote';
   meetingId: string;
   name: string;
@@ -29,21 +30,22 @@ export class ModelAPI {
   }
 
   private static fromItem(item: StorageItem): Model {
-    const { scope, value } = item;
+    const { scope, value, id } = item;
     switch (item.kind) {
       case 'meeting': {
         const rest: Omit<Meeting, 'kind' | 'id'> = JSON.parse(value);
         return {
           kind: item.kind,
-          id: scope,
+          id,
           ...rest,
         };
       }
       case 'vote': {
-        const rest: Omit<Vote, 'kind' | 'meetingId'> = JSON.parse(value);
+        const rest: Omit<Vote, 'kind' | 'id' | 'meetingId'> = JSON.parse(value);
         return {
           kind: item.kind,
           meetingId: scope,
+          id,
           ...rest,
         };
       }
@@ -58,27 +60,44 @@ export class ModelAPI {
         return {
           kind,
           scope: id,
+          id,
           value,
         };
       }
       case 'vote': {
-        const { kind, meetingId, name, time } = model;
+        const { kind, meetingId, name, time, id } = model;
         const value = JSON.stringify({ name, time });
         return {
           kind,
           scope: meetingId,
+          id,
           value,
         };
       }
     }
   }
 
-  put(models: Model[]): Promise<void> {
-    const items = models.map(ModelAPI.toItem);
+  async createMeeting(meeting: Meeting): Promise<void> {
+    const { start, end, interval } = meeting;
+    if (start + interval > end) {
+      throw new Error('Time range must allow one interval');
+    }
+    if (start % interval !== 0) {
+      throw new Error('Start time must align to interval');
+    }
+    if (end % interval !== 0) {
+      throw new Error('End time must align to interval');
+    }
+    const item = ModelAPI.toItem(meeting);
+    await this.client.putItem(item);
+  }
+
+  vote(votes: Vote[]): Promise<void> {
+    const items = votes.map(ModelAPI.toItem);
     return this.client.put(items);
   }
 
-  async list(ids: string[]): Promise<MeetingWithVotes[]> {
+  async getMeetingVotes(ids: string[]): Promise<MeetingWithVotes[]> {
     const items = await this.client.list(ids);
     const parsed = items.map(ModelAPI.fromItem);
 

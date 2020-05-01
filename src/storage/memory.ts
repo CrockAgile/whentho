@@ -1,7 +1,7 @@
 import { StorageClient, StorageItem, StorageKey } from './client';
 
 export class MemoryStorageClient extends StorageClient {
-  private storage = new Map<string, string>();
+  public storage = new Map<string, string>();
   async putItem(item: StorageItem): Promise<void> {
     const key = StorageClient.stringifyKey(item);
     this.storage.set(key, item.value);
@@ -24,5 +24,8 @@ export class MemoryStorageClient extends StorageClient {
       }
     }
     return found;
+  }
+  clear() {
+    this.storage.clear();
   }
 }
