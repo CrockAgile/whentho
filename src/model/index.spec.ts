@@ -23,22 +23,22 @@ describe('model API', () => {
 
   it('fails to create meeting without start aligned to interval', async () => {
     const result = api.createMeeting({ ...meeting, start: start - 1 });
-    expect(result).rejects.toMatchInlineSnapshot(
-      `[Error: Start time must align to interval]`,
+    expect(result).rejects.toThrowErrorMatchingInlineSnapshot(
+      `"Start time must align to interval"`,
     );
   });
 
   it('fails to create meeting without end aligned to interval', async () => {
     const result = api.createMeeting({ ...meeting, end: end + 1 });
-    expect(result).rejects.toMatchInlineSnapshot(
-      `[Error: End time must align to interval]`,
+    expect(result).rejects.toThrowErrorMatchingInlineSnapshot(
+      `"End time must align to interval"`,
     );
   });
 
   it('fails to create a meeting without one interval in time range', async () => {
     const result = api.createMeeting({ ...meeting, end: start });
-    expect(result).rejects.toMatchInlineSnapshot(
-      `[Error: Time range must allow one interval]`,
+    expect(result).rejects.toThrowErrorMatchingInlineSnapshot(
+      `"Time range must allow one interval"`,
     );
   });
 
@@ -81,6 +81,20 @@ describe('model API', () => {
       await api.vote(votes);
       const retrieved = await api.getMeetingVotes([id]);
       expect(retrieved).toEqual([]);
+    });
+
+    it('fails to vote with name including reserved ":" character', async () => {
+      const result = api.vote([{ ...vote, name: 'Star Wars: A New Hope' }]);
+      expect(result).rejects.toThrowErrorMatchingInlineSnapshot(
+        `"Vote name cannot include reserved characters"`,
+      );
+    });
+
+    it('fails to vote with name including reserved "#" character', async () => {
+      const result = api.vote([{ ...vote, name: 'Mambo #5' }]);
+      expect(result).rejects.toThrowErrorMatchingInlineSnapshot(
+        `"Vote name cannot include reserved characters"`,
+      );
     });
   });
 });

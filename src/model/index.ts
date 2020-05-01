@@ -14,6 +14,7 @@ export interface MeetingWithVotes extends Meeting {
 }
 
 const VOTE_ID_SEPARATOR = '#';
+const RESERVED_CHARACTER_REGEX = /[#:]/mu;
 
 export type Vote = {
   kind: 'vote';
@@ -94,9 +95,15 @@ export class ModelAPI {
     await this.client.putItem(item);
   }
 
-  vote(votes: Vote[]): Promise<void> {
+  async vote(votes: Vote[]): Promise<void> {
+    const isValidName = votes.every(
+      v => !RESERVED_CHARACTER_REGEX.test(v.name),
+    );
+    if (!isValidName) {
+      throw new Error('Vote name cannot include reserved characters');
+    }
     const items = votes.map(ModelAPI.toItem);
-    return this.client.put(items);
+    return await this.client.put(items);
   }
 
   async getMeetingVotes(ids: string[]): Promise<MeetingWithVotes[]> {
