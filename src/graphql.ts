@@ -1,15 +1,22 @@
 import { GraphQLSchema } from 'graphql';
 import * as ApolloCore from 'apollo-server-core';
+import { ModelAPI } from './model';
+
+export interface GraphQLContext {
+  model: ModelAPI;
+}
 
 export class GraphQLHandler {
   private schema: GraphQLSchema;
-  constructor(schema: GraphQLSchema) {
+  private context: GraphQLContext;
+  constructor(schema: GraphQLSchema, model: ModelAPI) {
     this.schema = schema;
+    this.context = { model };
   }
   async handler(req: Request): Promise<Response> {
     try {
       const query = await req.json();
-      const options = { schema: this.schema };
+      const options = { schema: this.schema, context: this.context };
       const queryResponse = await ApolloCore.runHttpQuery([req], {
         options,
         method: req.method,
