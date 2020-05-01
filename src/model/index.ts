@@ -106,6 +106,11 @@ export class ModelAPI {
     return await this.client.put(items);
   }
 
+  async deleteVote(votes: Vote[]): Promise<void> {
+    const items = votes.map(ModelAPI.toItem);
+    return await this.client.delete(items);
+  }
+
   async getMeetingVotes(ids: string[]): Promise<MeetingWithVotes[]> {
     const items = await this.client.list(ids);
     const parsed = items.map(ModelAPI.fromItem);

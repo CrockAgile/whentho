@@ -22,6 +22,11 @@ export abstract class StorageClient {
     const putItems = items.map(i => this.putItem(i));
     await Promise.all(putItems);
   }
+  public abstract deleteItem(item: StorageItem): Promise<void>;
+  public async delete(items: StorageItem[]): Promise<void> {
+    const deleteItems = items.map(i => this.deleteItem(i));
+    await Promise.all(deleteItems);
+  }
   public abstract getItem(key: StorageKey): Promise<StorageItem | null>;
   public async get(keys: StorageKey[]): Promise<StorageItem[]> {
     const getItems = keys.map(k => this.getItem(k));

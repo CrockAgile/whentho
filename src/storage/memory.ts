@@ -6,6 +6,10 @@ export class MemoryStorageClient extends StorageClient {
     const key = StorageClient.stringifyKey(item);
     this.storage.set(key, item.value);
   }
+  async deleteItem(item: StorageItem): Promise<void> {
+    const key = StorageClient.stringifyKey(item);
+    this.storage.delete(key);
+  }
   async getItem(storageKey: StorageKey): Promise<StorageItem | null> {
     const key = StorageClient.stringifyKey(storageKey);
     const value = this.storage.get(key);
