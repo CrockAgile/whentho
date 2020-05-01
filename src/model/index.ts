@@ -13,8 +13,9 @@ export interface MeetingWithVotes extends Meeting {
   votes: Vote[];
 }
 
+const VOTE_ID_SEPARATOR = '#';
+
 export type Vote = {
-  id: string;
   kind: 'vote';
   meetingId: string;
   name: string;
@@ -41,12 +42,13 @@ export class ModelAPI {
         };
       }
       case 'vote': {
-        const rest: Omit<Vote, 'kind' | 'id' | 'meetingId'> = JSON.parse(value);
+        const [timeStr, name] = id.split(VOTE_ID_SEPARATOR);
+        const time = parseInt(timeStr);
         return {
           kind: item.kind,
           meetingId: scope,
-          id,
-          ...rest,
+          name,
+          time,
         };
       }
     }
@@ -65,13 +67,13 @@ export class ModelAPI {
         };
       }
       case 'vote': {
-        const { kind, meetingId, name, time, id } = model;
-        const value = JSON.stringify({ name, time });
+        const { kind, meetingId, name, time } = model;
+        const id = [time, name].join(VOTE_ID_SEPARATOR);
         return {
           kind,
           scope: meetingId,
           id,
-          value,
+          value: '{}',
         };
       }
     }

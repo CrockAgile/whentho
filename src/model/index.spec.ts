@@ -47,8 +47,7 @@ describe('model API', () => {
 
     const time = start + interval;
 
-    const voteId = '123123';
-    const vote: Vote = { id: voteId, kind: 'vote', meetingId: id, name, time };
+    const vote: Vote = { kind: 'vote', meetingId: id, name, time };
     const votes = [vote];
 
     it('votes for meeting', async () => {
@@ -65,12 +64,10 @@ describe('model API', () => {
       const bountyVotes = [
         {
           ...vote,
-          id: '12312312',
           name: 'Jango',
         },
         {
           ...vote,
-          id: '88923',
           name: 'Boba',
         },
       ];
