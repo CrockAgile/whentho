@@ -1,8 +1,7 @@
-export type StorageKind = 'meeting' | 'vote';
-
 export interface StorageKey {
   scope: string;
-  kind: StorageKind;
+  kind: 'meeting' | 'vote';
+  id: string;
 }
 
 export interface StorageItem extends StorageKey {
@@ -11,12 +10,12 @@ export interface StorageItem extends StorageKey {
 
 export abstract class StorageClient {
   static stringifyKey(storageKey: StorageKey): string {
-    const { kind, scope } = storageKey;
-    return [scope, kind].join(':');
+    const { kind, scope, id } = storageKey;
+    return [scope, kind, id].join(':');
   }
   static parseKey(stringKey: string): StorageKey {
-    const [scope, kind] = stringKey.split(':');
-    return { scope, kind } as StorageKey;
+    const [scope, kind, id] = stringKey.split(':');
+    return { scope, kind, id } as StorageKey;
   }
   public abstract putItem(item: StorageItem): Promise<void>;
   public async put(items: StorageItem[]): Promise<void> {
