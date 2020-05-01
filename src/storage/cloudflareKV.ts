@@ -15,6 +15,10 @@ export class CloudflareKVStorageClient extends StorageClient {
     const key = StorageClient.stringifyKey(item);
     await WhenThoNameSpace.put(key, item.value, { expirationTtl: this.ttl });
   }
+  async deleteItem(item: StorageItem): Promise<void> {
+    const key = StorageClient.stringifyKey(item);
+    await WhenThoNameSpace.delete(key);
+  }
   private async getItemByKey(key: string): Promise<StorageItem | null> {
     const value = await WhenThoNameSpace.get(key);
     if (!value) {

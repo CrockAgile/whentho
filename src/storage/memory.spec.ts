@@ -31,4 +31,11 @@ describe('memory storage client', () => {
     const retrieved = await client.list([items[0].scope]);
     expect(retrieved).toEqual(items);
   });
+
+  it('deletes items', async () => {
+    await client.put(items);
+    await client.delete(items);
+    const retrieved = await client.list([items[0].scope]);
+    expect(retrieved).toEqual([]);
+  });
 });

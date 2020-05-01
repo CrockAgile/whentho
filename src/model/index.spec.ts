@@ -58,6 +58,19 @@ describe('model API', () => {
       expect(retrieved).toEqual([{ ...meeting, votes }]);
     });
 
+    it('deletes votes for meeting', async () => {
+      await api.createMeeting(meeting);
+      await api.vote(votes);
+
+      const retrieved = await api.getMeetingVotes([id]);
+      expect(retrieved).toEqual([{ ...meeting, votes }]);
+
+      await api.deleteVote(votes);
+
+      const empty = await api.getMeetingVotes([id]);
+      expect(empty).toEqual([{ ...meeting, votes: [] }]);
+    });
+
     it('votes for meeting with multiple names', async () => {
       await api.createMeeting(meeting);
 
