@@ -15,6 +15,7 @@ export interface MeetingWithVotes extends Meeting {
 
 const VOTE_ID_SEPARATOR = '#';
 const RESERVED_CHARACTER_REGEX = /[#:]/mu;
+export const MAX_ITEM_TTL = 60 * 60 * 24 * 180;
 
 export type Vote = {
   kind: 'vote';
