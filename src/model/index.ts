@@ -1,3 +1,4 @@
+import { UserInputError } from 'apollo-server-cloudflare';
 import { isUuid } from 'uuidv4';
 import { StorageClient, StorageItem } from '../storage';
 
@@ -95,13 +96,13 @@ export class ModelAPI {
     const now = this.nowUnixSeconds();
     const isWithinMinimumTTL = instants.every(i => i >= now);
     if (!isWithinMinimumTTL) {
-      throw new Error('Time is not within minimum TTL');
+      throw new UserInputError('Time is not within minimum TTL');
     }
 
     const max = now + this.getMaxTTL();
     const isWithinMaxTTL = instants.every(i => i <= max);
     if (!isWithinMaxTTL) {
-      throw new Error('Time is not within maximum TTL');
+      throw new UserInputError('Time is not within maximum TTL');
     }
   }
 
@@ -114,16 +115,16 @@ export class ModelAPI {
     this.assertInstantIsWithinValidTimeRange([start, end]);
 
     if (start + interval > end) {
-      throw new Error('Time range must allow one interval');
+      throw new UserInputError('Time range must allow one interval');
     }
     if (start % interval !== 0) {
-      throw new Error('Start time must align to interval');
+      throw new UserInputError('Start time must align to interval');
     }
     if (end % interval !== 0) {
-      throw new Error('End time must align to interval');
+      throw new UserInputError('End time must align to interval');
     }
     if (interval % MEETING_BASE_INTERVAL !== 0) {
-      throw new Error(
+      throw new UserInputError(
         `Meeting interval must be multiple of ${MEETING_BASE_INTERVAL} seconds`,
       );
     }
@@ -138,7 +139,7 @@ export class ModelAPI {
       v => !RESERVED_CHARACTER_REGEX.test(v.name),
     );
     if (!isValidName) {
-      throw new Error('Vote name cannot include reserved characters');
+      throw new UserInputError('Vote name cannot include reserved characters');
     }
     const items = votes.map(ModelAPI.toItem);
     return await this.client.put(items);
@@ -152,7 +153,7 @@ export class ModelAPI {
   async getMeetingVotes(ids: string[]): Promise<MeetingWithVotes[]> {
     const isValidId = ids.every(isUuid);
     if (!isValidId) {
-      throw new Error('Invalid meeting ID');
+      throw new UserInputError('Invalid meeting ID');
     }
     const items = await this.client.list(ids);
     const parsed = items.map(ModelAPI.fromItem);
