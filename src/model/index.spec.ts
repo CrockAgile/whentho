@@ -96,6 +96,20 @@ describe('model API', () => {
       expect(retrieved).toEqual([]);
     });
 
+    it('ignores votes before start of interval', async () => {
+      await api.createMeeting(meeting);
+      await api.vote([{ ...vote, time: start - interval }]);
+      const retrieved = await api.getMeetingVotes([id]);
+      expect(retrieved).toEqual([{ ...meeting, votes: [] }]);
+    });
+
+    it('ignores votes at end of interval', async () => {
+      await api.createMeeting(meeting);
+      await api.vote([{ ...vote, time: end }]);
+      const retrieved = await api.getMeetingVotes([id]);
+      expect(retrieved).toEqual([{ ...meeting, votes: [] }]);
+    });
+
     it('fails to vote with name including reserved ":" character', async () => {
       const result = api.vote([{ ...vote, name: 'Star Wars: A New Hope' }]);
       expect(result).rejects.toThrowErrorMatchingInlineSnapshot(
