@@ -89,6 +89,16 @@ describe('model API', () => {
     );
   });
 
+  it('fails to create a meeting with invalid interval', async () => {
+    const interval = 60;
+    const start = mockNowSec + interval;
+    const end = start + interval;
+    const result = api.createMeeting({ ...meeting, interval, start, end });
+    expect(result).rejects.toThrowErrorMatchingInlineSnapshot(
+      `"Meeting interval must be multiple of 300 seconds"`,
+    );
+  });
+
   describe('votes', () => {
     const name = 'Jeff';
 
