@@ -177,7 +177,10 @@ export class ModelAPI {
     return meetings.map(meeting => {
       const votes = votesByMeetingId.get(meeting.id) || [];
       const votesInRange = votes.filter(
-        v => v.time >= meeting.start && v.time < meeting.end,
+        v =>
+          v.time >= meeting.start &&
+          v.time < meeting.end &&
+          v.time % meeting.interval === 0,
       );
       return {
         votes: votesInRange,

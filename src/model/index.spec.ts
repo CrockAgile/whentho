@@ -160,6 +160,13 @@ describe('model API', () => {
       expect(retrieved).toEqual([{ ...meeting, votes: [] }]);
     });
 
+    it('ignores votes which are unaligned to interval', async () => {
+      await api.createMeeting(meeting);
+      await api.vote([{ ...vote, time: start + 30 }]);
+      const retrieved = await api.getMeetingVotes([id]);
+      expect(retrieved).toEqual([{ ...meeting, votes: [] }]);
+    });
+
     it('ignores votes at end of interval', async () => {
       await api.createMeeting(meeting);
       await api.vote([{ ...vote, time: end }]);
