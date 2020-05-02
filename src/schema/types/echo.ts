@@ -3,6 +3,9 @@ import { SchemaType } from '../type';
 import { GraphQLContext } from '../../graphql';
 
 const type = `
+  """
+  Echo service used for basic testing
+  """
   type Echo {
     back: String!
   }
