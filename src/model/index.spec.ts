@@ -7,9 +7,19 @@ describe('model API', () => {
   const api = new ModelAPI(client);
   const id = uuid();
   const interval = 1800;
-  const start = interval;
+  const start = 1622505600;
   const end = start + 10 * interval;
   const meeting: Meeting = { kind: 'meeting', start, end, interval, id };
+
+  const nowSpy = jest.spyOn(global.Date, 'now');
+
+  const mockNowSec = start - 10 * interval;
+  const mockNowMilli = mockNowSec * 1000;
+  nowSpy.mockImplementation(() => mockNowMilli);
+
+  afterAll(() => {
+    nowSpy.mockRestore();
+  });
 
   beforeEach(() => {
     client.clear();
@@ -24,6 +34,30 @@ describe('model API', () => {
 
     const retrieved = await api.getMeetingVotes([id]);
     expect(retrieved).toEqual([{ ...meeting, votes: [] }]);
+  });
+
+  it('fails to create meeting beyond max TTL', async () => {
+    const beyondEnd = mockNowSec + api.getMaxTTL() + interval;
+    const result = api.createMeeting({
+      ...meeting,
+      start: mockNowSec,
+      end: beyondEnd,
+    });
+    expect(result).rejects.toThrowErrorMatchingInlineSnapshot(
+      `"Time is not within maximum TTL"`,
+    );
+  });
+
+  it('fails to create meeting that ends before now', async () => {
+    const beforeNow = mockNowSec - interval;
+    const result = api.createMeeting({
+      ...meeting,
+      start: mockNowSec,
+      end: beforeNow,
+    });
+    expect(result).rejects.toThrowErrorMatchingInlineSnapshot(
+      `"Time is not within minimum TTL"`,
+    );
   });
 
   it('fails to list meeawait ting not using full UUID prefix', async () => {
@@ -134,6 +168,22 @@ describe('model API', () => {
       const result = api.vote([{ ...vote, name: 'Mambo #5' }]);
       expect(result).rejects.toThrowErrorMatchingInlineSnapshot(
         `"Vote name cannot include reserved characters"`,
+      );
+    });
+
+    it('fails to vote before now', async () => {
+      const result = api.vote([{ ...vote, time: mockNowSec - interval }]);
+      expect(result).rejects.toThrowErrorMatchingInlineSnapshot(
+        `"Time is not within minimum TTL"`,
+      );
+    });
+
+    it('fails to vote after max TTL', async () => {
+      const result = api.vote([
+        { ...vote, time: mockNowSec + api.getMaxTTL() + interval },
+      ]);
+      expect(result).rejects.toThrowErrorMatchingInlineSnapshot(
+        `"Time is not within maximum TTL"`,
       );
     });
   });

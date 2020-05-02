@@ -6,14 +6,15 @@ declare global {
 }
 
 export class CloudflareKVStorageClient extends StorageClient {
-  private ttl: number;
-  constructor(ttl: number) {
+  // have items expire a week later just for slop
+  private expirationBufferSeconds = 60 * 60 * 7;
+  constructor() {
     super();
-    this.ttl = ttl;
   }
   async putItem(item: StorageItem): Promise<void> {
     const key = StorageClient.stringifyKey(item);
-    await WhenThoNameSpace.put(key, item.value, { expirationTtl: this.ttl });
+    const expiration = item.expiration + this.expirationBufferSeconds;
+    await WhenThoNameSpace.put(key, item.value, { expiration });
   }
   async deleteItem(item: StorageItem): Promise<void> {
     const key = StorageClient.stringifyKey(item);
@@ -25,7 +26,7 @@ export class CloudflareKVStorageClient extends StorageClient {
       return null;
     }
     const storageKey = StorageClient.parseKey(key);
-    return { ...storageKey, value };
+    return { ...storageKey, value, expiration: 0 };
   }
   async getItem(storageKey: StorageKey): Promise<StorageItem | null> {
     const key = StorageClient.stringifyKey(storageKey);

@@ -67,6 +67,7 @@ export class ModelAPI {
           scope: id,
           id,
           value,
+          expiration: end,
         };
       }
       case 'vote': {
@@ -77,8 +78,27 @@ export class ModelAPI {
           scope: meetingId,
           id,
           value: '{}',
+          expiration: time,
         };
       }
+    }
+  }
+
+  private nowUnixSeconds(): number {
+    return Math.floor(Date.now() / 1000);
+  }
+
+  private assertInstantIsWithinValidTimeRange(instants: number[]) {
+    const now = this.nowUnixSeconds();
+    const isWithinMinimumTTL = instants.every(i => i >= now);
+    if (!isWithinMinimumTTL) {
+      throw new Error('Time is not within minimum TTL');
+    }
+
+    const max = now + this.getMaxTTL();
+    const isWithinMaxTTL = instants.every(i => i <= max);
+    if (!isWithinMaxTTL) {
+      throw new Error('Time is not within maximum TTL');
     }
   }
 
@@ -88,6 +108,8 @@ export class ModelAPI {
 
   async createMeeting(meeting: Meeting): Promise<void> {
     const { start, end, interval } = meeting;
+    this.assertInstantIsWithinValidTimeRange([start, end]);
+
     if (start + interval > end) {
       throw new Error('Time range must allow one interval');
     }
@@ -102,6 +124,8 @@ export class ModelAPI {
   }
 
   async vote(votes: Vote[]): Promise<void> {
+    this.assertInstantIsWithinValidTimeRange(votes.map(v => v.time));
+
     const isValidName = votes.every(
       v => !RESERVED_CHARACTER_REGEX.test(v.name),
     );

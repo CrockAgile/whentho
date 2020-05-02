@@ -13,8 +13,8 @@ const mutation = '';
 
 const resolvers: IResolvers<any, GraphQLContext> = {
   Query: {
-    maxTTL: (_parents, args, { model }, _info) => {
-      return model.getMaxTTL;
+    maxTTL: (_parents, _args, { model }, _info) => {
+      return model.getMaxTTL();
     },
   },
 };
