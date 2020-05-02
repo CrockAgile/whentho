@@ -4,9 +4,7 @@ webpack_config = 'webpack.config.js'
 account_id = 'f662588e1b414d6188fce196fd7e6d66'
 zone_id = '504b4d349429345f123b3736d588c034'
 route = 'https://api-development.whentho.xyz/*'
-vars = {
-  NODE_ENV = "production"
-}
+vars = { NODE_ENV = "production" }
 kv-namespaces = [
   { binding = "WhenThoNameSpace", id = "9698698f9084479aaef84687191494b8" }
 ]
