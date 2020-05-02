@@ -6,6 +6,7 @@ export interface StorageKey {
 
 export interface StorageItem extends StorageKey {
   value: string;
+  expiration: number;
 }
 
 export abstract class StorageClient {

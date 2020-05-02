@@ -15,6 +15,7 @@ describe('memory storage client', () => {
       kind: 'meeting',
       scope: id,
       value: JSON.stringify({ name: 'Movie Night' }),
+      expiration: 3600,
     },
   ];
 
