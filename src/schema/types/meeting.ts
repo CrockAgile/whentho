@@ -5,6 +5,10 @@ import { uuid } from 'uuidv4';
 import * as model from '../../model';
 
 const type = `
+  """
+  A meeting with a constant start, end, and interval.
+  Provides the constant unique identifier which scopes all other resources.
+  """
   type Meeting {
     id: ID!
     interval: Int!

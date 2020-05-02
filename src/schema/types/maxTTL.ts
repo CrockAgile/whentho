@@ -6,6 +6,9 @@ const type = `
 `;
 
 const query = `
+  """
+  Get maximum TTL supported by backend. Clients can limit meeting creation times.
+  """
   maxTTL() : Int!
 `;
 

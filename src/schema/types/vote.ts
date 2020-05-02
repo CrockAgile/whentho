@@ -4,6 +4,10 @@ import { GraphQLContext } from '../../graphql';
 import * as model from '../../model';
 
 const type = `
+  """
+  A vote for a meeting time.
+  Uniquely identified by name and time.
+  """
   type Vote {
     meetingId: ID!
     name: String!
