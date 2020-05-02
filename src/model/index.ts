@@ -16,6 +16,7 @@ export interface MeetingWithVotes extends Meeting {
 
 const VOTE_ID_SEPARATOR = '#';
 const RESERVED_CHARACTER_REGEX = /[#:]/mu;
+const MEETING_BASE_INTERVAL = 60 * 5;
 export const MAX_ITEM_TTL = 60 * 60 * 24 * 180;
 
 export type Vote = {
@@ -120,6 +121,11 @@ export class ModelAPI {
     }
     if (end % interval !== 0) {
       throw new Error('End time must align to interval');
+    }
+    if (interval % MEETING_BASE_INTERVAL !== 0) {
+      throw new Error(
+        `Meeting interval must be multiple of ${MEETING_BASE_INTERVAL} seconds`,
+      );
     }
     const item = ModelAPI.toItem(meeting);
     await this.client.putItem(item);
