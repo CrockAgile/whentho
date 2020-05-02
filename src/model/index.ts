@@ -1,3 +1,4 @@
+import { isUuid } from 'uuidv4';
 import { StorageClient, StorageItem } from '../storage';
 
 export type Meeting = {
@@ -113,6 +114,10 @@ export class ModelAPI {
   }
 
   async getMeetingVotes(ids: string[]): Promise<MeetingWithVotes[]> {
+    const isValidId = ids.every(isUuid);
+    if (!isValidId) {
+      throw new Error('Invalid meeting ID');
+    }
     const items = await this.client.list(ids);
     const parsed = items.map(ModelAPI.fromItem);
 
