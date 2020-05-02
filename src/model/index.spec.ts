@@ -1,10 +1,11 @@
+import { uuid } from 'uuidv4';
 import { ModelAPI, Meeting, Vote } from './index';
 import { MemoryStorageClient } from '../storage';
 
 describe('model API', () => {
   const client = new MemoryStorageClient();
   const api = new ModelAPI(client);
-  const id = '010239012';
+  const id = uuid();
   const interval = 1800;
   const start = interval;
   const end = start + 10 * interval;
@@ -19,6 +20,14 @@ describe('model API', () => {
 
     const retrieved = await api.getMeetingVotes([id]);
     expect(retrieved).toEqual([{ ...meeting, votes: [] }]);
+  });
+
+  it('fails to list meeawait ting not using full UUID prefix', async () => {
+    // try to enumerate all meetings beginning with 'a'
+    const result = api.getMeetingVotes(['a']);
+    expect(result).rejects.toThrowErrorMatchingInlineSnapshot(
+      `"Invalid meeting ID"`,
+    );
   });
 
   it('fails to create meeting without start aligned to interval', async () => {
