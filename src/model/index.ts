@@ -40,7 +40,8 @@ export class ModelAPI {
         const rest: Omit<Meeting, 'kind' | 'id'> = JSON.parse(value);
         return {
           kind: item.kind,
-          id,
+          // scope and ID are the same for meetings
+          id: scope,
           ...rest,
         };
       }
@@ -65,7 +66,8 @@ export class ModelAPI {
         return {
           kind,
           scope: id,
-          id,
+          // set empty meeting ID since meeting ID is also scope
+          id: '0',
           value,
           expiration: end,
         };
