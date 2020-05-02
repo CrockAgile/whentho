@@ -82,6 +82,10 @@ export class ModelAPI {
     }
   }
 
+  getMaxTTL(): number {
+    return MAX_ITEM_TTL;
+  }
+
   async createMeeting(meeting: Meeting): Promise<void> {
     const { start, end, interval } = meeting;
     if (start + interval > end) {

@@ -15,6 +15,10 @@ describe('model API', () => {
     client.clear();
   });
 
+  it('gets maxmimum TTL', () => {
+    expect(api.getMaxTTL()).toMatchInlineSnapshot(`15552000`);
+  });
+
   it('creates meeting', async () => {
     await api.createMeeting(meeting);
 
