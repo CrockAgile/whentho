@@ -2,17 +2,14 @@ import { IResolvers } from 'apollo-server-cloudflare';
 import { SchemaType } from '../type';
 import { GraphQLContext } from '../../graphql';
 
-const type = `
+const schema = `
+  type Query {
+    """
+    Get maximum TTL supported by backend. Clients can limit meeting creation times.
+    """
+    maxTTL() : Int!
+  }
 `;
-
-const query = `
-  """
-  Get maximum TTL supported by backend. Clients can limit meeting creation times.
-  """
-  maxTTL() : Int!
-`;
-
-const mutation = '';
 
 const resolvers: IResolvers<any, GraphQLContext> = {
   Query: {
@@ -23,8 +20,6 @@ const resolvers: IResolvers<any, GraphQLContext> = {
 };
 
 export const Echo: SchemaType = {
-  type,
-  query,
-  mutation,
+  schema,
   resolvers,
 };

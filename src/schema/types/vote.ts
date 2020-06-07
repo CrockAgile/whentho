@@ -3,7 +3,7 @@ import { SchemaType } from '../type';
 import { GraphQLContext } from '../../graphql';
 import * as model from '../../model';
 
-const type = `
+const schema = `
   """
   A vote for a meeting time.
   Uniquely identified by name and time.
@@ -13,14 +13,11 @@ const type = `
     name: String!
     time: Int!
   }
-`;
 
-const query = `
-`;
-
-const mutation = `
-  vote(meetingId: ID!, name: String!, time: Int!) : Vote
-  deleteVote(meetingId: ID!, name: String!, time: Int!) : Vote
+  type Mutation {
+    vote(meetingId: ID!, name: String!, time: Int!) : Vote
+    deleteVote(meetingId: ID!, name: String!, time: Int!) : Vote
+  }
 `;
 
 const resolvers: IResolvers<any, GraphQLContext> = {
@@ -52,8 +49,6 @@ const resolvers: IResolvers<any, GraphQLContext> = {
 };
 
 export const Vote: SchemaType = {
-  type,
-  query,
-  mutation,
+  schema,
   resolvers,
 };
