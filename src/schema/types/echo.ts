@@ -2,20 +2,18 @@ import { IResolvers } from 'apollo-server-cloudflare';
 import { SchemaType } from '../type';
 import { GraphQLContext } from '../../graphql';
 
-const type = `
+const schema = `
   """
   Echo service used for basic testing
   """
   type Echo {
     back: String!
   }
-`;
 
-const query = `
-  echo(sound: String!) : Echo
+  type Query {
+    echo(sound: String!) : Echo
+  }
 `;
-
-const mutation = '';
 
 const resolvers: IResolvers<any, GraphQLContext> = {
   Query: {
@@ -29,8 +27,6 @@ const resolvers: IResolvers<any, GraphQLContext> = {
 };
 
 export const Echo: SchemaType = {
-  type,
-  query,
-  mutation,
+  schema,
   resolvers,
 };
