@@ -16,7 +16,11 @@ export class GraphQLHandler {
   async handler(req: Request): Promise<Response> {
     try {
       const query = await req.json();
-      const options = { schema: this.schema, context: this.context };
+      const options = {
+        schema: this.schema,
+        schemaHash: '' as any,
+        context: this.context,
+      };
       const queryResponse = await ApolloCore.runHttpQuery([req], {
         options,
         method: req.method,
